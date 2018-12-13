@@ -3,9 +3,9 @@ import utils.toUTF8String
 
 @ExperimentalUnsignedTypes
 @JsName("ByteBuffer")
-class ByteBuffer {
-    var position: Int = 0
+class ByteBuffer() {
     var bytes: List<Byte> = mutableListOf()
+    var position: Int = 0
 
     fun readBytes(len: Int): List<Byte> {
         val data = bytes.subList(position, len)

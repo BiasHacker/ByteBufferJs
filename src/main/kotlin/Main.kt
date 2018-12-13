@@ -6,5 +6,10 @@ import kotlin.browser.document
 
 @JsName("main")
 fun main(args: Array<String>) {
-    println("hello world!!!")
+    var input = mutableListOf<Byte>(
+            1, 2, 3, 4, 5, 6, 7, 8, 9, 0
+    )
+    val bytes = ByteBuffer()
+    bytes.bytes = input
+    println(bytes.readBoolean())
 }
