@@ -1,10 +1,10 @@
-import utils.shl
+import utils.*
 import utils.toUTF8String
 
 @ExperimentalUnsignedTypes
 @JsName("ByteBuffer")
-class ByteBuffer() {
-    var bytes: List<Byte> = mutableListOf()
+class ByteBuffer {
+    var bytes: MutableList<Byte> = mutableListOf()
     var position: Int = 0
 
     fun readBytes(len: Int): List<Byte> {
@@ -13,12 +13,12 @@ class ByteBuffer() {
         return data
     }
 
-    fun readBoolean(): Boolean {
-        return bytes[position++].toInt() > 0
-    }
-
     fun readByte(): Byte {
         return bytes[position++]
+    }
+
+    fun readBoolean(): Boolean {
+        return bytes[position++].toInt() > 0
     }
 
     fun readDouble(): Double {
@@ -67,16 +67,70 @@ class ByteBuffer() {
     }
 
     fun readUTF(): String {
-        return readUTFBytes(readUnsignedShort().toInt())
+        return readUTFBytes(readShort().toInt())
     }
 
     fun readUTFBytes(length: Int): String {
         return readBytes(length).toUTF8String()
     }
 
+    fun writeBytes(value: List<Byte>) {
+        bytes.addAll(value)
+        position += value.size
+    }
+
+    fun writeByte(value: Byte) {
+        bytes.add(value)
+        position += 1
+    }
+
+    fun writeBoolean(value: Boolean) {
+        writeByte(if (value) 1 else 0)
+    }
+
+    fun writeDouble(value: Double) {
+        val intBits = value.toBits()
+        for (i in 56 downTo 0 step 8) {
+            writeByte((intBits shr i and 0xFF).toByte())
+        }
+    }
+
+    fun writeFloat(value: Float) {
+        val intBits = value.toBits()
+        for (i in 24 downTo 0 step 8) {
+            writeByte((intBits shr i and 0xFF).toByte())
+        }
+    }
+
+    fun writeInt(value: Int) {
+        for (i in 24 downTo 0 step 8) {
+            writeByte((value shr i and 0xFF).toByte())
+        }
+    }
+
+    fun writeShort(value: Short) {
+        for (i in 8 downTo 0 step 8) {
+            writeByte((value shr i and 0xFF).toByte())
+        }
+    }
+
+    fun writeUnsignedInt(value: UInt) {
+        for (i in 24 downTo 0 step 8) {
+            writeByte((value shr i and 0xFFU).toByte())
+        }
+    }
+
+    fun writeUTF(value: String) {
+        val hex = value.toUTF8Bytes()
+        writeShort(hex.size.toShort())
+        writeBytes(hex)
+    }
+
+    fun writeUTFBytes(value: String) {
+        writeBytes(value.toUTF8Bytes())
+    }
+
     override fun toString() = bytes.joinToString("") {
         it.toUByte().toString(16)
     }
-
-
 }
