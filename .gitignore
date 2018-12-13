@@ -1,0 +1,7 @@
+.gradle
+.idea
+build
+gradle
+source
+web
+*.iml
