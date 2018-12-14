@@ -17,6 +17,12 @@ class ByteBuffer {
         bytes.clear()
     }
 
+    @JsName("new")
+    fun new(data: Array<Byte>) {
+        position = 0
+        bytes = data.toMutableList()
+    }
+
     @JsName("readBytes")
     fun readBytes(len: Int): List<Byte> {
         val data = bytes.subList(position, position + len)
