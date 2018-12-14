@@ -7,8 +7,16 @@ class ByteBuffer {
     var bytes: MutableList<Byte> = mutableListOf()
     var position: Int = 0
 
+    val size: Int
+        get() = bytes.size
+
+    fun clear() {
+        position = 0
+        bytes.clear()
+    }
+
     fun readBytes(len: Int): List<Byte> {
-        val data = bytes.subList(position, len)
+        val data = bytes.subList(position, position + len)
         position += len
         return data
     }
@@ -18,21 +26,21 @@ class ByteBuffer {
     }
 
     fun readBoolean(): Boolean {
-        return bytes[position++].toInt() > 0
+        return readByte().toInt() > 0
     }
 
     fun readDouble(): Double {
-        var value = 0L
+        var value = 0UL
         for (i in 56 downTo 0 step 8) {
-            value += readByte() shl i
+            value += readUnsignedByte().toULong() shl i
         }
-        return Double.fromBits(value)
+        return Double.fromBits(value.toLong())
     }
 
     fun readFloat(): Float {
         var value = 0
         for (i in 24 downTo 0 step 8) {
-            value += readByte() shl i
+            value += readUnsignedByte() shl i
         }
         return Float.fromBits(value)
     }
@@ -40,7 +48,7 @@ class ByteBuffer {
     fun readInt(): Int {
         var value = 0
         for (i in 24 downTo 0 step 8) {
-            value += readByte() shl i
+            value += readUnsignedByte() shl i
         }
         return value
     }
@@ -48,7 +56,7 @@ class ByteBuffer {
     fun readShort(): Short {
         var value: Short = 0
         for (i in 8 downTo 0 step 8) {
-            val s = (readByte() shl i).toShort()
+            val s = (readUnsignedByte() shl i).toShort()
             value = (value + s).toShort()
         }
         return value
@@ -130,7 +138,7 @@ class ByteBuffer {
         writeBytes(value.toUTF8Bytes())
     }
 
-    override fun toString() = bytes.joinToString("") {
-        it.toUByte().toString(16)
+    override fun toString() = bytes.joinToString(" ") {
+        it.toUByte().toString(16).padStart(2, '0').toUpperCase()
     }
 }
