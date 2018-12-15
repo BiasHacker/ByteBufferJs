@@ -104,8 +104,8 @@ class ByteBuffer {
     }
 
     @JsName("writeBytes")
-    fun writeBytes(value: List<Byte>) {
-        value.forEach(::writeByte)
+    fun writeBytes(value: Array<Byte>) {
+        value.toList().forEach(::writeByte)
     }
 
     @JsName("writeByte")
@@ -163,12 +163,12 @@ class ByteBuffer {
     fun writeUTF(value: String) {
         val hex = value.toUTF8Bytes()
         writeShort(hex.size.toShort())
-        writeBytes(hex)
+        writeBytes(hex.toTypedArray())
     }
 
     @JsName("writeUTFBytes")
     fun writeUTFBytes(value: String) {
-        writeBytes(value.toUTF8Bytes())
+        writeBytes(value.toUTF8Bytes().toTypedArray())
     }
 
     @JsName("toJsonString")
