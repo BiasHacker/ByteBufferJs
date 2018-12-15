@@ -104,14 +104,16 @@ class ByteBuffer {
 
     @JsName("writeBytes")
     fun writeBytes(value: List<Byte>) {
-        bytes.addAll(value)
-        position += value.size
+        value.forEach(::writeByte)
     }
 
     @JsName("writeByte")
     fun writeByte(value: Byte) {
-        bytes.add(value)
-        position += 1
+        if (bytes.size <= position) {
+            bytes.addAll((0..position - bytes.size)
+                    .map { 0.toByte() }.toList())
+        }
+        bytes[position++] = value
     }
 
     @JsName("writeBoolean")
