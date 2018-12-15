@@ -170,6 +170,11 @@ class ByteBuffer {
         writeBytes(value.toUTF8Bytes())
     }
 
+    @JsName("toJsonString")
+    fun toJsonString(): String {
+        return JSON.stringify(bytes)
+    }
+
     override fun toString() = bytes.joinToString(" ") {
         it.toUByte().toString(16).padStart(2, '0').toUpperCase()
     }
