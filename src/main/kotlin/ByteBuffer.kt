@@ -1,3 +1,4 @@
+import org.khronos.webgl.Uint8Array
 import utils.*
 import utils.toUTF8String
 
@@ -173,6 +174,11 @@ class ByteBuffer {
     @JsName("toJsonString")
     fun toJsonString(): String {
         return JSON.stringify(bytes)
+    }
+
+    @JsName("toUint8Array")
+    fun toUint8Array(): Uint8Array {
+        return Uint8Array(bytes.toTypedArray())
     }
 
     override fun toString() = bytes.joinToString(" ") {
