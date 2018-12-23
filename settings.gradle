@@ -7,5 +7,5 @@ pluginManagement {
         }
     }
 }
-rootProject.name = 'ByteBufferJs'
+rootProject.name = 'byte-buffer'
 
